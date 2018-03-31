@@ -1,0 +1,24 @@
+{
+  "name": "whosonfirst-utils",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/mocha/bin/mocha"
+  },
+  "author": "Jones Magloire (@Joxit)",
+  "license": "MIT",
+  "dependencies": {
+    "bluebird": "^3.5.1",
+    "epsg": "^0.3.0",
+    "pg": "^7.4.1",
+    "proj4": "^2.4.4",
+    "shapefile": "^0.6.6",
+    "winston": "^2.4.1"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "mocha": "^5.0.5",
+    "sinon": "^4.5.0"
+  }
+}
