@@ -1,6 +1,9 @@
 {
   "type": "Feature",
   "properties": {
+    "first-key": "first-props value",
+    "second-key": "second-props value",
+    "third-key": "third-props value"
   },
   "geometry": {
     "type": "Polygon",
