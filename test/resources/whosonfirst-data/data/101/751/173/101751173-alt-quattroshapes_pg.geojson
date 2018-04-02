@@ -1,0 +1,16 @@
+{
+  "id": 101751173,
+  "type": "Feature",
+  "properties": {
+    "src:geom":"quattroshapes_pg",
+    "wof:geomhash":"1f92b6ed8cf664be81ae13b4ecd91cae",
+    "wof:id":101751173
+},
+  "bbox": [
+    2.34167,
+    48.95833,
+    2.34167,
+    48.95833
+],
+  "geometry": {"coordinates":[2.34167,48.95833],"type":"Point"}
+}

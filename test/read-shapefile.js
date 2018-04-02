@@ -173,6 +173,31 @@ describe('Read shapefile', () => {
         });
         expect(readShapefile.readAsync()).to.be.instanceof(Promise);
       });
+      it('with evaluate.fn function that returns object/undefined', () => {
+        let readShapefile = new ReadShapefile({
+          shp: './test/resources/shapefiles/EPSG2154.shp',
+          dbf: './test/resources/shapefiles/EPSG2154.dbf',
+          evaluate: {fn: () => { return undefined; }}
+        });
+        expect(readShapefile.readAsync()).to.be.instanceof(Promise);
+      });
+      it('with evaluate.fn function that returns Promise', () => {
+        let readShapefile = new ReadShapefile({
+          shp: './test/resources/shapefiles/EPSG2154.shp',
+          dbf: './test/resources/shapefiles/EPSG2154.dbf',
+          evaluate: {fn: () => { return Promise.resolve(); }}
+        });
+        expect(readShapefile.readAsync()).to.be.instanceof(Promise);
+      });
+      it('with evaluate.fn function that returns bluebird Promise', () => {
+        let Bluebird = require('bluebird');
+        let readShapefile = new ReadShapefile({
+          shp: './test/resources/shapefiles/EPSG2154.shp',
+          dbf: './test/resources/shapefiles/EPSG2154.dbf',
+          evaluate: {fn: () => { return Bluebird.resolve(); }}
+        });
+        expect(readShapefile.readAsync()).to.be.instanceof(Promise);
+      });
     })
   });
 });

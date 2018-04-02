@@ -1,0 +1,2 @@
+bbox,cessation,country_id,deprecated,file_hash,fullname,geom_hash,geom_latitude,geom_longitude,id,inception,iso,iso_country,lastmodified,lbl_latitude,lbl_longitude,locality_id,name,parent_id,path,placetype,region_id,source,superseded_by,supersedes,wof_country
+"2.2882734999998,48.80743799999985,2.6031494999998,49.01239799999984",uuuu,85633147,,1d042a87543d928f1bb08ae60d4b0255,,ba7e378d1b4d02537a5c08a6c17e5a09,48.917619,2.478392,85683475,uuuu,FR,FR,1505432734,48.916383,2.493932,0,Seine-Saint-Denis,404227465,856/834/75/85683475.geojson,region,85683475,quattroshapes,,,FR

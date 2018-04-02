@@ -1,0 +1,2 @@
+bbox,cessation,country_id,deprecated,file_hash,fullname,geom_hash,geom_latitude,geom_longitude,id,inception,iso,iso_country,lastmodified,lbl_latitude,lbl_longitude,locality_id,name,parent_id,path,placetype,region_id,source,superseded_by,supersedes,wof_country
+"2.3333129501238,48.9465302972303,2.37593593869164,48.97422910478753",uuuu,85633147,,317999ab17da6c857845db7e965af721,,80a60ea9a3d80ce83cd8a232c3d18309,48.959548,2.356188,102070993,uuuu,FR,FR,1514440720,48.958048,2.357641,0,Pierrefitte-Sur-Seine,404228189,102/070/993/102070993.geojson,county,85683475,quattroshapes,,,FR

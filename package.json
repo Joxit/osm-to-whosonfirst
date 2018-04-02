@@ -4,16 +4,21 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/mocha/bin/mocha"
+    "test": "LOG_LEVEL=none ./node_modules/mocha/bin/mocha"
   },
   "author": "Jones Magloire (@Joxit)",
   "license": "MIT",
   "dependencies": {
+    "@turf/point-on-feature": "^5.1.5",
     "bluebird": "^3.5.1",
     "epsg": "^0.3.0",
+    "pelias-whosonfirst": "^2.22.4",
     "pg": "^7.4.1",
+    "polygon-lookup": "^2.2.0",
     "proj4": "^2.4.4",
+    "request": "^2.85.0",
     "shapefile": "^0.6.6",
+    "through2-sink": "^1.0.0",
     "winston": "^2.4.1"
   },
   "devDependencies": {

@@ -1,0 +1,2 @@
+bbox,cessation,country_id,deprecated,file_hash,fullname,geom_hash,geom_latitude,geom_longitude,id,inception,iso,iso_country,lastmodified,lbl_latitude,lbl_longitude,locality_id,name,parent_id,path,placetype,region_id,source,superseded_by,supersedes,wof_country
+"1.4467434999998,48.12053699999984,3.55845499999981,49.24106199999986",uuuu,85633147,,6a228e70fe937e701104e3b836e660bf,,e7d7fda59cd4d5e3f86dfdd02921f81a,48.709279,2.503397,404227465,uuuu,FR,FR,1514419503,0.000000,0.000000,0,Ile-of-France,85633147,404/227/465/404227465.geojson,macroregion,0,quattroshapes,,,FR
