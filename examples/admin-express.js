@@ -1,12 +1,10 @@
 #!/usr/bin/env node
+
 const Promise = require('bluebird');
 const fs = Promise.promisifyAll(require('fs'));
-const http = Promise.promisifyAll(require('http'));
-const request = Promise.promisifyAll(require('request'));
+const removeDiacritics = require('diacritics').remove;
 const ReadShapefile = require('../lib/read-shapefile');
 const ReprojectGeoJSON = require('../lib/reproject-geojson');
-const whosonfirst = require('pelias-whosonfirst');
-const sink = require('through2-sink');
 const pointOnFeature = require('@turf/point-on-feature');
 const WofLookup = require('../lib/whosonfirst-lookup');
 const features = [];
@@ -18,38 +16,38 @@ if (!pipServiceUrl) {
   console.error(`Arg missing. Usage : ${process.argv[1]} shapefile dbf pip-service-url`);
   process.exit(1);
 }
-const wofLookup = new WofLookup({url: pipServiceUrl, layers: ['locality', 'localadmin']})
+const wofLookup = new WofLookup({ url: pipServiceUrl, layers: ['locality', 'localadmin'] })
 const localities = {
-"type": "FeatureCollection",
-"name": "localities",
-"features": []
+  "type": "FeatureCollection",
+  "name": "localities",
+  "features": []
 };
 const localadmin = {
-"type": "FeatureCollection",
-"name": "localadmin",
-"features": []
+  "type": "FeatureCollection",
+  "name": "localadmin",
+  "features": []
 };
 const localityAndLocaladmin = {
-"type": "FeatureCollection",
-"name": "newlocalities",
-"features": []
+  "type": "FeatureCollection",
+  "name": "newlocalities",
+  "features": []
 };
 const newlocalities = {
-"type": "FeatureCollection",
-"name": "newlocalities",
-"features": []
+  "type": "FeatureCollection",
+  "name": "newlocalities",
+  "features": []
 };
 
 
 const evaluate = (r) => {
   reproject.parse(r);
   let p = pointOnFeature(r).geometry.coordinates;
-  wofLookup.lookup({lat: p[0], long: p[1], layers: ['locality', 'localadmin']}).then(body => {
+  wofLookup.lookup({ lat: p[0], long: p[1], layers: ['locality', 'localadmin'] }).then(body => {
     let wof = {};
     body.forEach(e => {
-      if(e.Placetype == 'locality' && e.name.toLowerCase() == r.properties.NOM_COM.toLowerCase()) {
+      if (e.Placetype == 'locality' && removeDiacritics(e.name.toLowerCase()) == removeDiacritics(r.properties.NOM_COM.toLowerCase())) {
         wof.locality = e;
-      } else if (e.Placetype == 'localadmin' && e.name.toLowerCase () == r.properties.NOM_COM.toLowerCase() ){
+      } else if (e.Placetype == 'localadmin' && removeDiacritics(e.name.toLowerCase()) == removeDiacritics(r.properties.NOM_COM.toLowerCase())) {
         wof.localadmin = e;
       }
     });
@@ -71,7 +69,7 @@ const evaluate = (r) => {
 const shp = new ReadShapefile({
   shp: shapefile,
   dbf: dbf,
-  evaluate: {fn: evaluate, keep: ['NOM_COM']}
+  evaluate: { fn: evaluate, keep: ['NOM_COM'] }
 })
 
 wofLookup.load().then(() => {
