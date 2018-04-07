@@ -7,6 +7,7 @@ const ReadShapefile = require('../lib/read-shapefile');
 const ReprojectGeoJSON = require('../lib/reproject-geojson');
 const pointOnFeature = require('@turf/point-on-feature');
 const WofLookup = require('../lib/whosonfirst-lookup');
+const winston = require('../lib/logger');
 const features = [];
 const reproject = new ReprojectGeoJSON(2154, 4326);
 const shapefile = process.argv[2];
@@ -64,17 +65,18 @@ const evaluate = (r) => {
       r.properties['wof:localadmin_id'] = wof.localadmin.id;
       localadmin.features.push(r)
     }
+    winston.debug(`{ name: "${r.properties["NOM_COM"]}", locality: ${r.properties['wof:locality_id']}, localadmin: ${r.properties['wof:localadmin_id']} }`);
   });
 }
 const shp = new ReadShapefile({
   shp: shapefile,
   dbf: dbf,
-  evaluate: { fn: evaluate, keep: ['NOM_COM'] }
-})
+  evaluate: { fn: evaluate, filter: { keep: ['NOM_COM'] } }
+});
 
 wofLookup.load().then(() => {
-  return shp.readAsync().then(r => {
-
+  return shp.readAsync().then(() => {
+    winston.info('Reading done.');
   });
 }).then(() => {
   fs.writeFileSync('localities.geojson', JSON.stringify(localities));
