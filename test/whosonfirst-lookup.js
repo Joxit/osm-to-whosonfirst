@@ -1,6 +1,6 @@
 const expect = require('chai').expect;
 const sinon = require('sinon');
-const WhosonfirstLookup = require('../lib/whosonfirst-lookup');
+const WhosonfirstLookup = require('../').WhosonfirstLookup;
 
 describe('Who\'s On First lookup', () => {
   it('should load data from directory', done => {
@@ -8,6 +8,8 @@ describe('Who\'s On First lookup', () => {
     wofLookup.load().then(() => {
       expect(wofLookup.pipService).to.not.be.undefined;
       done();
+    }).catch(done).finally(() => {
+      wofLookup.pipService.end();
     });
   });
   it('should return polygon', (done) => {
@@ -21,6 +23,8 @@ describe('Who\'s On First lookup', () => {
     }).then(r => {
       expect(r[0].Id).to.be.equal(101751173)
       done();
+    }).catch(done).finally(() => {
+      wofLookup.pipService.end();
     });
   });
 });

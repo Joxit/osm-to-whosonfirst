@@ -1,6 +1,6 @@
 const expect = require('chai').expect;
 const sinon = require('sinon');
-const ReprojectGeoJSON = require('../lib/reproject-geojson');
+const ReprojectGeoJSON = require('../').ReprojectGeoJSON;
 const fs = require('fs')
 const EPSG2154Example = () => JSON.parse(fs.readFileSync('./test/resources/EPSG2154.geojson'));
 const EPSG4326Example = () => JSON.parse(fs.readFileSync('./test/resources/EPSG4326.geojson'));

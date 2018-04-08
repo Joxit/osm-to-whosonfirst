@@ -1,6 +1,6 @@
 const expect = require('chai').expect;
 const sinon = require('sinon');
-const ReadShapefile = require('../lib/read-shapefile');
+const ReadShapefile = require('../').ReadShapefile;
 const fs = require('fs');
 const EPSG2154Example = () => JSON.parse(fs.readFileSync('./test/resources/EPSG2154.geojson'));
 

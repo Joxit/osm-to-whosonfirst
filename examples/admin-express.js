@@ -3,11 +3,11 @@
 const Promise = require('bluebird');
 const fs = Promise.promisifyAll(require('fs'));
 const removeDiacritics = require('diacritics').remove;
-const ReadShapefile = require('../lib/read-shapefile');
-const ReprojectGeoJSON = require('../lib/reproject-geojson');
+const ReadShapefile = require('../').ReadShapefile;
+const ReprojectGeoJSON = require('../').ReprojectGeoJSON;
 const pointOnFeature = require('@turf/point-on-feature');
-const WofLookup = require('../lib/whosonfirst-lookup');
-const winston = require('../lib/logger');
+const WofLookup = require('../').WhosonfirstLookup;
+const winston = require('../').winston;
 const features = [];
 const reproject = new ReprojectGeoJSON(2154, 4326);
 const shapefile = process.argv[2];
