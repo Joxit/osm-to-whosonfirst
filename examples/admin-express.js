@@ -17,7 +17,7 @@ if (!pipServiceUrl) {
   console.error(`Arg missing. Usage : ${process.argv[1]} shapefile dbf pip-service-url`);
   process.exit(1);
 }
-const wofLookup = new WofLookup({ url: pipServiceUrl, layers: ['locality', 'localadmin'] })
+const wofLookup = new WofLookup({ directory: pipServiceUrl, layers: ['country'] })
 const localities = {
   "type": "FeatureCollection",
   "name": "localities",
@@ -39,16 +39,19 @@ const newlocalities = {
   "features": []
 };
 
+function clean(name) {
+  return removeDiacritics(name.toLowerCase().replace(/-/g, ' ').replace('st.', 'saint').replace('ste.', 'sainte'))
+}
 
 const evaluate = (r) => {
   reproject.parse(r);
   let p = pointOnFeature(r).geometry.coordinates;
-  wofLookup.lookup({ lat: p[0], long: p[1], layers: ['locality', 'localadmin'] }).then(body => {
+  wofLookup.lookup({ lat: p[1], long: p[0], layers: ['locality', 'localadmin'] }).then(body => {
     let wof = {};
     body.forEach(e => {
-      if (e.Placetype == 'locality' && removeDiacritics(e.name.toLowerCase()) == removeDiacritics(r.properties.NOM_COM.toLowerCase())) {
+      if (e.Placetype == 'locality' && clean(e.name) == clean(r.properties.NOM_COM)) {
         wof.locality = e;
-      } else if (e.Placetype == 'localadmin' && removeDiacritics(e.name.toLowerCase()) == removeDiacritics(r.properties.NOM_COM.toLowerCase())) {
+      } else if (e.Placetype == 'localadmin' && clean(e.name) == clean(r.properties.NOM_COM)) {
         wof.localadmin = e;
       }
     });
