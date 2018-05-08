@@ -17,6 +17,7 @@ describe('Read shapefile', () => {
         "third-key": "third-props value"
       });
       expect(readShapefile._getProps(example.properties)).to.deep.equal(EPSG2154Example().properties);
+      expect(readShapefile.opts.dbf).to.equal('test/resources/shapefiles/EPSG2154.dbf');
     });
     it('should delete props and alter original object with filter.delete', () => {
       let filter = {
@@ -32,6 +33,7 @@ describe('Read shapefile', () => {
       expect(readShapefile._getProps(example.properties, filter)).to.deep.equal({
         "second-key": "second-props value"
       });
+      expect(readShapefile.opts.dbf).to.equal('test/resources/shapefiles/EPSG2154.dbf');
     });
     it('should keep props and alter original object with filter.keep', () => {
       let filter = {
@@ -49,6 +51,7 @@ describe('Read shapefile', () => {
         "first-key": "first-props value",
         "third-key": "third-props value"
       });
+      expect(readShapefile.opts.dbf).to.equal('test/resources/shapefiles/EPSG2154.dbf');
     });
   });
   describe('default add geoJSON', () => {
