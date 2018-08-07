@@ -5,19 +5,20 @@ const fs = Promise.promisifyAll(require('fs'));
 const removeDiacritics = require('diacritics').remove;
 const ReadShapefile = require('../').ReadShapefile;
 const ReprojectGeoJSON = require('../').ReprojectGeoJSON;
-const pointOnFeature = require('@turf/point-on-feature');
+const pointOnFeature = require('@turf/center-of-mass').default;
 const WofLookup = require('../').WhosonfirstLookup;
 const winston = require('../').winston;
+const path = require('path');
 const features = [];
 const reproject = new ReprojectGeoJSON(2154, 4326);
 const shapefile = process.argv[2];
-const dbf = process.argv[3];
-const pipServiceUrl = process.argv[4];
+const pipServiceUrl = process.argv[3];
+const output = process.argv[4] || './';
 if (!pipServiceUrl) {
-  console.error(`Arg missing. Usage : ${process.argv[1]} shapefile dbf pip-service-url`);
+  console.error(`Arg missing. Usage : ${process.argv[1]} shapefile pip-service-url output`);
   process.exit(1);
 }
-const wofLookup = new WofLookup({ directory: pipServiceUrl, layers: ['country'] })
+const wofLookup = new WofLookup({ directory: pipServiceUrl.startsWith('/') ? pipServiceUrl : null, url: pipServiceUrl.startsWith('/') ? null : pipServiceUrl, layers: ['locality', 'localadmin'] })
 const localities = {
   "type": "FeatureCollection",
   "name": "localities",
@@ -43,18 +44,29 @@ function clean(name) {
   return removeDiacritics(name.toLowerCase().replace(/-/g, ' ').replace('st.', 'saint').replace('ste.', 'sainte'))
 }
 
+function lookupLocalityAndLocaladmin(p) {
+  return Promise.all([
+    wofLookup.lookup({ lat: p[1], long: p[0], layers: ['locality'] }),
+    wofLookup.lookup({ lat: p[1], long: p[0], layers: ['localadmin'] })
+  ]).then(res => {
+    return res[0].concat(res[1]);
+  });
+}
+
 const evaluate = (r) => {
   reproject.parse(r);
   let p = pointOnFeature(r).geometry.coordinates;
-  wofLookup.lookup({ lat: p[1], long: p[0], layers: ['locality', 'localadmin'] }).then(body => {
+  lookupLocalityAndLocaladmin(p).then(body => {
     let wof = {};
     body.forEach(e => {
-      if (e.Placetype == 'locality' && clean(e.name) == clean(r.properties.NOM_COM)) {
+      if (e.Placetype == 'locality' && clean(e.name || e.Name) == clean(r.properties.NOM_COM)) {
         wof.locality = e;
-      } else if (e.Placetype == 'localadmin' && clean(e.name) == clean(r.properties.NOM_COM)) {
+      } else if (e.Placetype == 'localadmin' && clean(e.name || e.Name) == clean(r.properties.NOM_COM)) {
         wof.localadmin = e;
       }
     });
+    r.properties['pip:center'] = p;
+    r.properties['pip:body'] = body;
     if (wof.locality && wof.localadmin) {
       r.properties['wof:locality_id'] = wof.locality.id;
       r.properties['wof:localadmin_id'] = wof.localadmin.id;
@@ -73,8 +85,7 @@ const evaluate = (r) => {
 }
 const shp = new ReadShapefile({
   shp: shapefile,
-  dbf: dbf,
-  evaluate: { fn: evaluate, filter: { keep: ['NOM_COM'] } }
+  evaluate: { fn: evaluate }
 });
 
 wofLookup.load().then(() => {
@@ -82,8 +93,8 @@ wofLookup.load().then(() => {
     winston.info('Reading done.');
   });
 }).then(() => {
-  fs.writeFileSync('localities.geojson', JSON.stringify(localities));
-  fs.writeFileSync('localadmin.geojson', JSON.stringify(localadmin));
-  fs.writeFileSync('localityAndLocaladmin.geojson', JSON.stringify(localityAndLocaladmin));
-  fs.writeFileSync('newlocalities.geojson', JSON.stringify(newlocalities));
-});
+  fs.writeFileSync(path.join(output, 'localities.geojson'), JSON.stringify(localities));
+  fs.writeFileSync(path.join(output, 'localadmin.geojson'), JSON.stringify(localadmin));
+  fs.writeFileSync(path.join(output, 'localityAndLocaladmin.geojson'), JSON.stringify(localityAndLocaladmin));
+  fs.writeFileSync(path.join(output, 'newlocalities.geojson'), JSON.stringify(newlocalities));
+}).catch(winston.error).finally(() => { process.exit(0); });

@@ -28,5 +28,18 @@ describe('Who\'s on first utils', () => {
         done();
       });
     }).catch(done);
-  })
+  });
 });
+
+describe('Equals utils', () => {
+  it('sould return true when two integer are almost equals', () => {
+    expect(utils.equals(10, 10)).to.be.true;
+    expect(utils.equals(10, 11, 1)).to.be.true;
+    expect(utils.equals(10, 10.25, 0.5)).to.be.true;
+  });
+  it('sould return true when two integer are not equals', () => {
+    expect(utils.equals(10, 11)).to.be.false;
+    expect(utils.equals(10, 12, 1)).to.be.false;
+    expect(utils.equals(10, 10.5, 0.25)).to.be.false;
+  });
+})

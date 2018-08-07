@@ -42,7 +42,7 @@ fs.readFileAsync(geojson).then(file => {
       return 0;
     } else return 1
   });
-  return Promise.mapSeries(localities.slice(1, 5), e => {
+  return Promise.mapSeries(localities, e => {
     const featureCollection = getFeatureCollection(e.properties.NOM_COM);
     featureCollection.features.push(e)
     const p1 = e.properties.pointOnFeature;
@@ -72,7 +72,7 @@ fs.readFileAsync(geojson).then(file => {
         });
       }).then(features => {
         if (featureCollection.features.length > 1) {
-          console.log(e.properties.NOM_COM)
+          winston.debug(e.properties.NOM_COM)
         }
         return featureCollection;
       });

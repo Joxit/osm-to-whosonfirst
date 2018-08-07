@@ -58,3 +58,5 @@ typings/
 .env
 
 examples/resources/
+*.geojson
+!test/**.geojson
