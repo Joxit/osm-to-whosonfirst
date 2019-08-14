@@ -4,5 +4,13 @@ module.exports = {
   utils: require('./lib/utils'),
   WhosonfirstLookup: require('./lib/whosonfirst-lookup'),
   whosonfirstStream: require('./lib/whosonfirst-stream'),
-  winston: require('./lib/logger')
+  WhosonfirstCrawl: require('./lib/whosonfirst-crawl'),
+  winston: require('./lib/logger'),
+  geonamesToJSON: require('./lib/geonames-to-json'),
+  client: {
+    WofPipServerClient: require('./lib/client/wof-pip-server')
+  },
+  geojson: {
+    coords: require('./lib/geojson/coords')
+  }
 };
