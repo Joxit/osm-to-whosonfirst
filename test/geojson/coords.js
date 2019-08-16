@@ -69,4 +69,30 @@ describe('GeoJSON coords', () => {
       expect(geojson.coords.contains(JSON.parse(villetaneuse).geometry.coordinates, JSON.parse(france).geometry.coordinates)).to.be.false
     })
   })
+
+  describe('flattenPolygons', () => {
+    it('should not change Polygons coordinates', () => {
+      expect(geojson.coords.flattenPolygons(JSON.parse(villetaneuse))).to.deep.equal(JSON.parse(villetaneuse).geometry.coordinates)
+    })
+    it('should change MultiPolygons coordinates', () => {
+      geojson.coords.flattenPolygons(JSON.parse(france)).forEach(c => {
+        c.forEach(c => {
+          expect(c[0]).to.be.a('number')
+          expect(c[1]).to.be.a('number')
+        })
+      })
+    })
+  })
+
+  describe('clockwise', () => {
+    it('Polygons coordinates should be clockwise', () => {
+      expect(geojson.coords.clockwise(JSON.parse(villetaneuse).geometry.coordinates[0])).to.be.true
+    })
+    it('MultiPolygons coordinates should not all be clockwise', () => {
+      geojson.coords.flattenPolygons(JSON.parse(france)).forEach((c, index, coords) => {
+        if (index < coords.length - 1) expect(geojson.coords.clockwise(c)).to.be.true
+        if (index === coords.length - 1) expect(geojson.coords.clockwise(c)).to.be.false
+      })
+    })
+  })
 })
