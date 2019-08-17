@@ -11,6 +11,7 @@ module.exports = {
     WofPipServerClient: require('./lib/client/wof-pip-server')
   },
   geojson: {
-    coords: require('./lib/geojson/coords')
+    coords: require('./lib/geojson/coords'),
+    polygons: require('./lib/geojson/polygons')
   }
 };
