@@ -82,6 +82,11 @@ describe('GeoJSON coords', () => {
         })
       })
     })
+    it('should flatten empty polygons', () => {
+      const actual = geojson.coords.flattenPolygons(geojson.polygons.coordsToPolygon([]))
+      expect(actual).to.not.be.undefined
+      expect(actual).to.be.a('array')
+    })
   })
 
   describe('clockwise', () => {

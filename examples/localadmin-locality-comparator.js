@@ -9,9 +9,9 @@ const request = Promise.promisifyAll(require('request'));
 const http = Promise.promisifyAll(require('http'));
 const keepAliveAgent = new http.Agent({ keepAlive: true });
 const utils = require('../').utils;
-const whosonfirstStream = require('../').whosonfirstStream;
+const whosonfirstStream = require('../').whosonfirst.stream;
 const removeDiacritics = require('diacritics').remove;
-const WofLookup = require('../').WhosonfirstLookup;
+const WofLookup = require('../').whosonfirst.Lookup;
 
 const wofPath = process.argv[2];
 const output = process.argv[3];

@@ -2,11 +2,14 @@ module.exports = {
   ReadShapefile: require('./lib/read-shapefile'),
   ReprojectGeoJSON: require('./lib/reproject-geojson'),
   utils: require('./lib/utils'),
-  WhosonfirstLookup: require('./lib/whosonfirst-lookup'),
-  whosonfirstStream: require('./lib/whosonfirst-stream'),
-  WhosonfirstCrawl: require('./lib/whosonfirst-crawl'),
   winston: require('./lib/logger'),
   geonamesToJSON: require('./lib/geonames-to-json'),
+  whosonfirst: {
+    Lookup: require('./lib/whosonfirst/lookup'),
+    stream: require('./lib/whosonfirst/stream'),
+    Crawl: require('./lib/whosonfirst/crawl'),
+    FS: require('./lib/whosonfirst/fs'),
+  },
   client: {
     WofPipServerClient: require('./lib/client/wof-pip-server')
   },
